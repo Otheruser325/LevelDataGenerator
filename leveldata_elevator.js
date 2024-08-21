@@ -21,20 +21,39 @@ let elevatorStatMultiplier5001 = 1.1875;
 
 // Speed increment logic based on level ranges
 function calculateSpeedIncrement(level) {
-    if (level > 2400) {
+    // Levels 1 to 20: Increment speed by 0.01 for each level
+    if (level <= 20) {
+        return 0.01 * (level - 1);
+    } 
+    
+    // Levels above 2400: Increment speed by 0.002
+    else if (level > 2400) {
         return 0.002;
-    } else if (level > 799) {
-        return (level % 10 === 0) ? 0.01 : 0.002;
-    } else if (level > 299) {
-        return (level % 4 === 0) ? 0.01 : 0.002;
-    } else if (level > 199) {
-        return (level % 3 === 0) ? 0.01 : 0.002;
-    } else if (level > 99) {
-        return (level % 2 === 0) ? 0.01 : 0.002;
-    } else if (level > 20) {
-        return (level % 2 === 0) ? 0.01 : 0.002;
-    } else {
-        return 0.01;
+    } 
+    
+    // Levels 800 to 2400: Increment speed by 0.01 every 10 levels, otherwise 0
+    else if (level > 799) {
+        return (level % 10 === 0) ? 0.01 : 0;
+    } 
+    
+    // Levels 300 to 799: Increment speed by 0.01 every 4 levels, otherwise 0
+    else if (level > 299) {
+        return (level % 4 === 0) ? 0.01 : 0;
+    } 
+    
+    // Levels 200 to 299: Increment speed by 0.01 every 3 levels, otherwise 0
+    else if (level > 199) {
+        return (level % 3 === 0) ? 0.01 : 0;
+    } 
+    
+    // Levels 100 to 199: Increment speed by 0.01 every 2 levels, otherwise 0
+    else if (level > 99) {
+        return (level % 2 === 0) ? 0.01 : 0;
+    } 
+    
+    // Levels 21 to 99: Increment speed by 0.01 every 2 levels, otherwise 0
+    else {
+        return (level % 2 === 0) ? 0.01 : 0;
     }
 }
 
