@@ -168,7 +168,7 @@ function generateLevels_warehouse() {
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
 
         // Apply big update for specific levels if needed
-        if (newLevel["Level"] === 20 || newLevel["Level"] === 50 || newLevel["Level"] === 100 || newLevel["Level"] === 200 || newLevel["Level"] === 400 || newLevel["Level"] === 600 || newLevel["Level"] === 800 || newLevel["Level"] === 850 || newLevel["Level"] === 950 || newLevel["Level"] === 1050 || newLevel["Level"] === 1150 || newLevel["Level"] === 1250 || newLevel["Level"] === 1350 || newLevel["Level"] === 1450 || newLevel["Level"] === 1550 || newLevel["Level"] === 1600 || newLevel["Level"] === 1700 || newLevel["Level"] === 1800 || newLevel["Level"] === 1900 || newLevel["Level"] === 2000 || newLevel["Level"] === 2100 || newLevel["Level"] === 2200 || newLevel["Level"] === 2300 || newLevel["Level"] === 2400 || newLevel["Level"] === 2500 || newLevel["Level"] === 2600 || newLevel["Level"] === 2700 || newLevel["Level"] === 2800 || newLevel["Level"] === 2900 || newLevel["Level"] === 3000 || newLevel["Level"] === 3200 || newLevel["Level"] === 3400 || newLevel["Level"] === 3500 || newLevel["Level"] === 3700 || newLevel["Level"] === 3900 || newLevel["Level"] === 4000 || newLevel["Level"] === 4200 || newLevel["Level"] === 4400 || newLevel["Level"] === 4500 || newLevel["Level"] === 4600 || newLevel["Level"] === 4800 || newLevel["Level"] === 5000 || newLevel["Level"] === 5200 || newLevel["Level"] === 5400 || newLevel["Level"] === 5500) {
+        if ([20, 50, 100, 200, 400, 600, 800, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500].includes(newLevel["Level"])) {
             newLevel["BigUpdate"] = 1;
             newLevel["SuperCashReward"] = 15;
         } else {
@@ -177,32 +177,32 @@ function generateLevels_warehouse() {
         }
 
         // Update capacity and loading per second according to big update
-        if (newLevel["Level"] === 50 || newLevel["Level"] === 200 || newLevel["Level"] === 600 || newLevel["Level"] === 850 || newLevel["Level"] === 950 || newLevel["Level"] === 1050 || newLevel["Level"] === 1150 || newLevel["Level"] === 1250 || newLevel["Level"] === 1350 || newLevel["Level"] === 1450 || newLevel["Level"] === 1550 || newLevel["Level"] === 1500 || newLevel["Level"] === 1600 || newLevel["Level"] === 1700 || newLevel["Level"] === 1800 || newLevel["Level"] === 1900 || newLevel["Level"] === 2000 || newLevel["Level"] === 2100 || newLevel["Level"] === 2200 || newLevel["Level"] === 2300 || newLevel["Level"] === 2400) {
-            newLevel["CapacityPerWorker"] *= 2;
-            newLevel["LoadingPerSecond"] *= 2;
+        if ([50, 200, 600, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
+            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 2;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 2;
         } else if (newLevel["Level"] === 100) {
-            newLevel["CapacityPerWorker"] *= 1.25;
-            newLevel["LoadingPerSecond"] *= 1.25;
+            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 1.25;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.25;
         } else if (newLevel["Level"] === 800) {
-            newLevel["CapacityPerWorker"] *= 1.5;
-            newLevel["LoadingPerSecond"] *= 1.5;
-        } else if (newLevel["Level"] === 2000 || newLevel["Level"] === 2100 || newLevel["Level"] === 2200 || newLevel["Level"] === 2300 || newLevel["Level"] === 2400) {
+            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 1.5;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.5;
+        } else if ([2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
             newLevel["SuperCashReward"] = 400;
-        } else if (newLevel["Level"] === 2500 || newLevel["Level"] === 2600 || newLevel["Level"] === 2700 || newLevel["Level"] === 2800 || newLevel["Level"] === 2900) {
-            newLevel["CapacityPerWorker"] *= 3;
-            newLevel["LoadingPerSecond"] *= 3;
+        } else if ([2500, 2600, 2700, 2800, 2900].includes(newLevel["Level"])) {
+            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 3;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 3;
             newLevel["SuperCashReward"] = 500;
-        } else if (newLevel["Level"] === 3000 || newLevel["Level"] === 3500 || newLevel["Level"] === 4000 || newLevel["Level"] === 4500 || newLevel["Level"] === 5000 || newLevel["Level"] === 5500) {
-            newLevel["CapacityPerWorker"] *= 5;
-            newLevel["LoadingPerSecond"] *= 5;
+        } else if ([3000, 3500, 4000, 4500, 5000, 5500].includes(newLevel["Level"])) {
+            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 5;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 5;
             newLevel["SuperCashReward"] = 500;
-        } else if (newLevel["Level"] === 3200 || newLevel["Level"] === 3400 || newLevel["Level"] === 3700 || newLevel["Level"] === 3900) {
-            newLevel["CapacityPerWorker"] *= 4;
-            newLevel["LoadingPerSecond"] *= 4;
+        } else if ([3200, 3400, 3700, 3900].includes(newLevel["Level"])) {
+            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 4;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 4;
             newLevel["SuperCashReward"] = 300;
-        } else if (newLevel["Level"] === 4200 || newLevel["Level"] === 4400 || newLevel["Level"] === 4600 || newLevel["Level"] === 4800 || newLevel["Level"] === 5200 || newLevel["Level"] === 5400) {
-            newLevel["CapacityPerWorker"] *= 6;
-            newLevel["LoadingPerSecond"] *= 6;
+        } else if ([4200, 4400, 4600, 4800, 5200, 5400].includes(newLevel["Level"])) {
+            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 6;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 6;
             newLevel["SuperCashReward"] = 200;
         }
         
