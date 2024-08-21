@@ -19,6 +19,25 @@ let elevatorStatMultiplier4001 = 1.1667;
 let elevatorCostMultiplier5001 = 1.225;
 let elevatorStatMultiplier5001 = 1.1875;
 
+// Speed increment logic based on level ranges
+function calculateSpeedIncrement(level) {
+    if (level > 2400) {
+        return 0.002;
+    } else if (level > 799) {
+        return (level % 10 === 0) ? 0.01 : 0.002;
+    } else if (level > 299) {
+        return (level % 4 === 0) ? 0.01 : 0.002;
+    } else if (level > 199) {
+        return (level % 3 === 0) ? 0.01 : 0.002;
+    } else if (level > 99) {
+        return (level % 2 === 0) ? 0.01 : 0.002;
+    } else if (level > 20) {
+        return (level % 2 === 0) ? 0.01 : 0.002;
+    } else {
+        return 0.01;
+    }
+}
+
 function generateLevels_elevator() {
     let currentLevel = parseInt(document.getElementById('elevatorLevelInput').value);
     let currentCost = parseFloat(document.getElementById('elevatorCostInput').value);
@@ -83,33 +102,8 @@ function generateLevels_elevator() {
             incrementFactor = 0.002;  // Decrease increment for higher levels
         }
         
-        // Apply speed increment based on level ranges
-        newLevel["Speed"] = lastLevel["Speed"] + incrementFactor;
-
-        // Increase increment factor progressively
-        if (newLevel["Level"] > 20 && newLevel["Level"] <= 99) {
-            if (newLevel["Level"] % 2 === 0) {
-                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
-            }
-        } else if (newLevel["Level"] > 99 && newLevel["Level"] <= 199) {
-            if (newLevel["Level"] % 2 === 0) {
-                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
-            }
-        } else if (newLevel["Level"] > 199 && newLevel["Level"] <= 299) {
-            if (newLevel["Level"] % 3 === 0) {
-                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
-            }
-        } else if (newLevel["Level"] > 299 && newLevel["Level"] <= 799) {
-            if (newLevel["Level"] % 4 === 0) {
-                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
-            }
-        } else if (newLevel["Level"] > 799 && newLevel["Level"] <= 2399) {
-            if (newLevel["Level"] % 10 === 0) {
-                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
-            }
-        } else {
-            newLevel["Speed"] = lastLevel["Speed"] + 0.002;
-        }
+        // Calculate the new speed
+        newLevel["Speed"] = lastLevel["Speed"] + calculateSpeedIncrement(newLevel["Level"]);
 
         newLevel["Capacity"] = lastLevel["Capacity"] * currentStatMultiplier;
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
