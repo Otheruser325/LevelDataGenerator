@@ -82,9 +82,7 @@ function generateLevels_elevator() {
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
 
         // Apply big update for specific levels if needed
-        const bigUpdateLevels = [10, 40, 80, 150, 300, 500, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500];
-        
-        if (bigUpdateLevels.includes(newLevel["Level"])) {
+        if (newLevel["Level"] === 20 || newLevel["Level"] === 50 || newLevel["Level"] === 100 || newLevel["Level"] === 200 || newLevel["Level"] === 400 || newLevel["Level"] === 600 || newLevel["Level"] === 800 || newLevel["Level"] === 850 || newLevel["Level"] === 950 || newLevel["Level"] === 1050 || newLevel["Level"] === 1150 || newLevel["Level"] === 1250 || newLevel["Level"] === 1350 || newLevel["Level"] === 1450 || newLevel["Level"] === 1550 || newLevel["Level"] === 1600 || newLevel["Level"] === 1700 || newLevel["Level"] === 1800 || newLevel["Level"] === 1900 || newLevel["Level"] === 2000 || newLevel["Level"] === 2100 || newLevel["Level"] === 2200 || newLevel["Level"] === 2300 || newLevel["Level"] === 2400 || newLevel["Level"] === 2500 || newLevel["Level"] === 2600 || newLevel["Level"] === 2700 || newLevel["Level"] === 2800 || newLevel["Level"] === 2900 || newLevel["Level"] === 3000 || newLevel["Level"] === 3200 || newLevel["Level"] === 3400 || newLevel["Level"] === 3500 || newLevel["Level"] === 3700 || newLevel["Level"] === 3900 || newLevel["Level"] === 4000 || newLevel["Level"] === 4200 || newLevel["Level"] === 4400 || newLevel["Level"] === 4500 || newLevel["Level"] === 4600 || newLevel["Level"] === 4800 || newLevel["Level"] === 5000 || newLevel["Level"] === 5200 || newLevel["Level"] === 5400 || newLevel["Level"] === 5500) {
             newLevel["BigUpdate"] = 1;
             newLevel["SuperCashReward"] = 15;
         } else {
@@ -93,43 +91,33 @@ function generateLevels_elevator() {
         }
 
         // Update capacity and loading per second according to big update
-        const doubleCapacityLevels = [10, 40, 150, 300, 500, 1000, 600, 1100, 1200, 1300, 1400, 1500, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400];
-        const otherMultiplierLevels = {
-            80: 1.25,
-            800: 1.5,
-            900: 2.25,
-            1600: 3,
-            2500: 3,
-            2600: 3,
-            2700: 3,
-            2800: 3,
-            2900: 3,
-            3000: 5,
-            3500: 5,
-            4000: 5,
-            4500: 5,
-            5000: 5,
-            5500: 5,
-            3200: 4,
-            3400: 4,
-            3700: 4,
-            3900: 4,
-            4200: 6,
-            4400: 6,
-            4600: 6,
-            4800: 6,
-            5200: 6,
-            5400: 6
-        };
-
-        if (doubleCapacityLevels.includes(newLevel["Level"])) {
-            newLevel["Capacity"] *= 2;
+        if (newLevel["Level"] === 50 || newLevel["Level"] === 200 || newLevel["Level"] === 600 || newLevel["Level"] === 850 || newLevel["Level"] === 950 || newLevel["Level"] === 1050 || newLevel["Level"] === 1150 || newLevel["Level"] === 1250 || newLevel["Level"] === 1350 || newLevel["Level"] === 1450 || newLevel["Level"] === 1550 || newLevel["Level"] === 1500 || newLevel["Level"] === 1600 || newLevel["Level"] === 1700 || newLevel["Level"] === 1800 || newLevel["Level"] === 1900 || newLevel["Level"] === 2000 || newLevel["Level"] === 2100 || newLevel["Level"] === 2200 || newLevel["Level"] === 2300 || newLevel["Level"] === 2400) {
+            newLevel["CapacityPerWorker"] *= 2;
             newLevel["LoadingPerSecond"] *= 2;
-        } else if (otherMultiplierLevels[newLevel["Level"]]) {
-            const multiplier = otherMultiplierLevels[newLevel["Level"]];
-            newLevel["Capacity"] *= multiplier;
-            newLevel["LoadingPerSecond"] *= multiplier;
-            newLevel["SuperCashReward"] = 300 * multiplier;
+        } else if (newLevel["Level"] === 100) {
+            newLevel["CapacityPerWorker"] *= 1.25;
+            newLevel["LoadingPerSecond"] *= 1.25;
+        } else if (newLevel["Level"] === 800) {
+            newLevel["CapacityPerWorker"] *= 1.5;
+            newLevel["LoadingPerSecond"] *= 1.5;
+        } else if (newLevel["Level"] === 2000 || newLevel["Level"] === 2100 || newLevel["Level"] === 2200 || newLevel["Level"] === 2300 || newLevel["Level"] === 2400) {
+            newLevel["SuperCashReward"] = 400;
+        } else if (newLevel["Level"] === 2500 || newLevel["Level"] === 2600 || newLevel["Level"] === 2700 || newLevel["Level"] === 2800 || newLevel["Level"] === 2900) {
+            newLevel["CapacityPerWorker"] *= 3;
+            newLevel["LoadingPerSecond"] *= 3;
+            newLevel["SuperCashReward"] = 500;
+        } else if (newLevel["Level"] === 3000 || newLevel["Level"] === 3500 || newLevel["Level"] === 4000 || newLevel["Level"] === 4500 || newLevel["Level"] === 5000 || newLevel["Level"] === 5500) {
+            newLevel["CapacityPerWorker"] *= 5;
+            newLevel["LoadingPerSecond"] *= 5;
+            newLevel["SuperCashReward"] = 500;
+        } else if (newLevel["Level"] === 3200 || newLevel["Level"] === 3400 || newLevel["Level"] === 3700 || newLevel["Level"] === 3900) {
+            newLevel["CapacityPerWorker"] *= 4;
+            newLevel["LoadingPerSecond"] *= 4;
+            newLevel["SuperCashReward"] = 300;
+        } else if (newLevel["Level"] === 4200 || newLevel["Level"] === 4400 || newLevel["Level"] === 4600 || newLevel["Level"] === 4800 || newLevel["Level"] === 5200 || newLevel["Level"] === 5400) {
+            newLevel["CapacityPerWorker"] *= 6;
+            newLevel["LoadingPerSecond"] *= 6;
+            newLevel["SuperCashReward"] = 200;
         }
 
         // Push the new level data
