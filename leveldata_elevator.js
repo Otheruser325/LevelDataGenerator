@@ -1,6 +1,6 @@
 let levelData_elevator = [];
 
-const multipliers = {
+let multipliersElevator = {
     cost: {
         0: 1.20, 11: 1.20, 21: 1.17, 41: 1.15, 101: 1.13, 
         2501: 1.15, 3001: 1.18, 4001: 1.20, 5001: 1.225
@@ -11,7 +11,7 @@ const multipliers = {
     }
 };
 
-const specialLevels = {
+let specialLevelsElevator = {
     bigUpdate: [10, 40, 80, 150, 300, 500, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500],
     doubleStat: [10, 40, 150, 300, 500, 1000, 1100, 1200, 1300, 1400, 1500, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400],
     specialMultipliers: {
@@ -30,10 +30,10 @@ const specialLevels = {
 };
 
 function getMultiplier(level, type) {
-    let keys = Object.keys(multipliers[type]).map(k => parseInt(k));
+    let keys = Object.keys(multipliersElevator[type]).map(k => parseInt(k));
     for (let i = keys.length - 1; i >= 0; i--) {
         if (level >= keys[i]) {
-            return multipliers[type][keys[i]];
+            return multipliersElevator[type][keys[i]];
         }
     }
     return 1; // Default multiplier if not found
@@ -90,16 +90,16 @@ function generateLevels_elevator() {
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
 
         // Apply special multipliers and rewards if needed
-        if (specialLevels.doubleStat.includes(newLevel["Level"])) {
+        if (specialLevelsElevator.doubleStat.includes(newLevel["Level"])) {
             newLevel["Capacity"] *= 2;
             newLevel["LoadingPerSecond"] *= 2;
-        } else if (specialLevels.specialMultipliers[newLevel["Level"]]) {
+        } else if (specialLevelsElevator.specialMultipliers[newLevel["Level"]]) {
             newLevel["Capacity"] *= specialLevels.specialMultipliers[newLevel["Level"]];
             newLevel["LoadingPerSecond"] *= specialLevels.specialMultipliers[newLevel["Level"]];
         }
 
-        newLevel["BigUpdate"] = specialLevels.bigUpdate.includes(newLevel["Level"]) ? 1 : 0;
-        newLevel["SuperCashReward"] = specialLevels.specialRewards[newLevel["Level"]] || 0;
+        newLevel["BigUpdate"] = specialLevelsElevator.bigUpdate.includes(newLevel["Level"]) ? 1 : 0;
+        newLevel["SuperCashReward"] = specialLevelsElevator.specialRewards[newLevel["Level"]] || 0;
 
         // Push the new level data
         levelData_elevator.push(newLevel);
