@@ -128,7 +128,7 @@ function generateLevels_elevator() {
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
 
         // Apply big update for specific levels if needed
-        if ([20, 50, 100, 200, 400, 600, 800, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500].includes(newLevel["Level"])) {
+        if ([10, 40, 80, 150, 300, 500, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500].includes(newLevel["Level"])) {
             newLevel["BigUpdate"] = 1;
             newLevel["SuperCashReward"] = 15;
         } else {
@@ -137,15 +137,21 @@ function generateLevels_elevator() {
         }
 
         // Update capacity and loading per second according to big update
-        if ([50, 200, 600, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
+        if ([10, 40, 150, 300, 500, 1000, 1100, 1200, 1300, 1400, 1500, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
             newLevel["Capacity"] = newLevel["Capacity"] * 2;
             newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 2;
-        } else if (newLevel["Level"] === 100) {
+        } else if (newLevel["Level"] === 80) {
             newLevel["Capacity"] = newLevel["Capacity"] * 1.25;
             newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.25;
         } else if (newLevel["Level"] === 800) {
             newLevel["Capacity"] = newLevel["Capacity"] * 1.5;
             newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.5;
+        } else if (newLevel["Level"] === 900) {
+            newLevel["Capacity"] = newLevel["Capacity"] * 2.25;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 2.25;
+        } else if (newLevel["Level"] === 1600) {
+            newLevel["Capacity"] = newLevel["Capacity"] * 3;
+            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 3;
         } else if ([2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
             newLevel["SuperCashReward"] = 400;
         } else if ([2500, 2600, 2700, 2800, 2900].includes(newLevel["Level"])) {
