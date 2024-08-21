@@ -76,7 +76,42 @@ function generateLevels_elevator() {
 
         // Increment cost, capacity, and loading per second based on the current level
         newLevel["Cost"] = lastLevel["Cost"] * currentCostMultiplier;
-        // Increment speed by 2 milliseconds (0.002) for each level
+        // Determine the speed increment logic
+        if (newLevel["Level"] <= 20) {
+            newLevel["Speed"] = lastLevel["Speed"] + 0.01;
+        } else if (newLevel["Level"] <= 99) {
+            if (newLevel["Level"] % 2 === 0) {
+                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
+            } else {
+                newLevel["Speed"] = lastLevel["Speed"];
+            }
+        } else if (newLevel["Level"] <= 199) {
+            if (newLevel["Level"] % 2 === 0) {
+                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
+            } else {
+                newLevel["Speed"] = lastLevel["Speed"];
+            }
+        } else if (newLevel["Level"] <= 299) {
+            if (newLevel["Level"] % 3 === 0) {
+                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
+            } else {
+                newLevel["Speed"] = lastLevel["Speed"];
+            }
+        } else if (newLevel["Level"] <= 799) {
+            if (newLevel["Level"] % 4 === 0) {
+                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
+            } else {
+                newLevel["Speed"] = lastLevel["Speed"];
+            }
+        } else if (newLevel["Level"] <= 2399) {
+            if (newLevel["Level"] % 10 === 0) {
+                newLevel["Speed"] = lastLevel["Speed"] + 0.01;
+            } else {
+                newLevel["Speed"] = lastLevel["Speed"];
+            }
+        } else {
+            newLevel["Speed"] = lastLevel["Speed"] + 0.002;
+        }
         newLevel["Speed"] = lastLevel["Speed"] + 0.002;
         newLevel["Capacity"] = lastLevel["Capacity"] * currentStatMultiplier;
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
