@@ -21,10 +21,10 @@ let elevatorStatMultiplier5001 = 1.1875;
 
 // Speed increment logic based on level ranges
 function calculateSpeedIncrement(level) {
-    // Levels 1 to 20: Increment speed by 0.01 for each level
+    // Levels 1 to 20: Odd levels add 0.01, even levels add 0.02
     if (level <= 20) {
-        return 0.01 * (level - 1);
-    } 
+        return (level % 2 === 0) ? 0.02 : 0.01;
+    }
     
     // Levels above 2400: Increment speed by 0.002
     else if (level > 2400) {
