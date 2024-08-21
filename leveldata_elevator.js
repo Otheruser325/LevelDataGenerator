@@ -1,58 +1,58 @@
 let levelData_elevator = [];
 
-let elevatorCostMultiplier = 1.20;
-let elevatorStatMultiplier = 1.30;
-let elevatorCostMultiplier11 = 1.20;
-let elevatorStatMultiplier11 = 1.25;
-let elevatorCostMultiplier21 = 1.17;
-let elevatorStatMultiplier21 = 1.20;
-let elevatorCostMultiplier41 = 1.15;
-let elevatorStatMultiplier41 = 1.15;
-let elevatorCostMultiplier101 = 1.13;
-let elevatorStatMultiplier101 = 1.11;
-let elevatorCostMultiplier2501 = 1.15;
-let elevatorStatMultiplier2501 = 1.13;
-let elevatorCostMultiplier3001 = 1.18;
-let elevatorStatMultiplier3001 = 1.15;
-let elevatorCostMultiplier4001 = 1.20;
-let elevatorStatMultiplier4001 = 1.1667;
-let elevatorCostMultiplier5001 = 1.225;
-let elevatorStatMultiplier5001 = 1.1875;
+let multipliers = {
+    cost: {
+        0: 1.20, 11: 1.20, 21: 1.17, 41: 1.15, 101: 1.13, 
+        2501: 1.15, 3001: 1.18, 4001: 1.20, 5001: 1.225
+    },
+    stat: {
+        0: 1.30, 11: 1.25, 21: 1.20, 41: 1.15, 101: 1.11, 
+        2501: 1.13, 3001: 1.15, 4001: 1.1667, 5001: 1.1875
+    }
+};
 
-// Speed increment logic based on level ranges
+let specialLevels = {
+    bigUpdate: [10, 40, 80, 150, 300, 500, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500],
+    doubleStat: [10, 40, 150, 300, 500, 1000, 1100, 1200, 1300, 1400, 1500, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400],
+    specialMultipliers: {
+        80: 1.25, 800: 1.5, 900: 2.25, 1600: 3,
+        2500: 3, 2600: 3, 2700: 3, 2800: 3, 2900: 3,
+        3000: 5, 3500: 5, 4000: 5, 4500: 5, 5000: 5, 5500: 5,
+        3200: 4, 3400: 4, 3700: 4, 3900: 4,
+        4200: 6, 4400: 6, 4600: 6, 4800: 6, 5200: 6, 5400: 6
+    },
+    specialRewards: {
+        2000: 400, 2100: 400, 2200: 400, 2300: 400, 2400: 400,
+        2500: 500, 2600: 500, 2700: 500, 2800: 500, 2900: 500,
+        3000: 500, 3500: 500, 4000: 500, 4500: 500, 5000: 500, 5500: 500,
+        3200: 300, 3400: 300, 3700: 300, 3900: 300
+    }
+};
+
+function getMultiplier(level, type) {
+    let keys = Object.keys(multipliers[type]).map(k => parseInt(k));
+    for (let i = keys.length - 1; i >= 0; i--) {
+        if (level >= keys[i]) {
+            return multipliers[type][keys[i]];
+        }
+    }
+    return 1; // Default multiplier if not found
+}
+
 function calculateSpeedIncrement(level) {
-    // Levels 1 to 20: Odd levels add 0.01, even levels add 0.02
     if (level <= 20) {
         return (level % 2 === 0) ? 0.02 : 0.01;
-    }
-    
-    // Levels above 2400: Increment speed by 0.002
-    else if (level > 2400) {
+    } else if (level > 2400) {
         return 0.002;
-    } 
-    
-    // Levels 800 to 2400: Increment speed by 0.01 every 10 levels, otherwise 0
-    else if (level > 799) {
+    } else if (level > 799) {
         return (level % 10 === 0) ? 0.01 : 0;
-    } 
-    
-    // Levels 300 to 799: Increment speed by 0.01 every 4 levels, otherwise 0
-    else if (level > 299) {
+    } else if (level > 299) {
         return (level % 4 === 0) ? 0.01 : 0;
-    } 
-    
-    // Levels 200 to 299: Increment speed by 0.01 every 3 levels, otherwise 0
-    else if (level > 199) {
+    } else if (level > 199) {
         return (level % 3 === 0) ? 0.01 : 0;
-    } 
-    
-    // Levels 100 to 199: Increment speed by 0.01 every 2 levels, otherwise 0
-    else if (level > 99) {
+    } else if (level > 99) {
         return (level % 2 === 0) ? 0.01 : 0;
-    } 
-    
-    // Levels 21 to 99: Increment speed by 0.01 every 2 levels, otherwise 0
-    else {
+    } else {
         return (level % 2 === 0) ? 0.01 : 0;
     }
 }
@@ -77,100 +77,29 @@ function generateLevels_elevator() {
 
     for (let i = 0; i < levelsToGenerate; i++) {
         let newLevel = {};
-
         newLevel["Level"] = lastLevel["Level"] + 1;
 
-        // Determine the correct multiplier based on the level
-        let currentCostMultiplier;
-        let currentStatMultiplier;
-        if (currentLevel < 11) {
-            currentCostMultiplier = elevatorCostMultiplier;
-            currentStatMultiplier = elevatorStatMultiplier;
-        } else if (currentLevel < 21) {
-            currentCostMultiplier = elevatorCostMultiplier11;
-            currentStatMultiplier = elevatorStatMultiplier11;
-        } else if (currentLevel < 41) {
-            currentCostMultiplier = elevatorCostMultiplier21;
-            currentStatMultiplier = elevatorStatMultiplier21;
-        } else if (currentLevel < 101) {
-            currentCostMultiplier = elevatorCostMultiplier41;
-            currentStatMultiplier = elevatorStatMultiplier41;
-        } else if (currentLevel < 2501) {
-            currentCostMultiplier = elevatorCostMultiplier101;
-            currentStatMultiplier = elevatorStatMultiplier101;
-        } else if (currentLevel < 3001) {
-            currentCostMultiplier = elevatorCostMultiplier2501;
-            currentStatMultiplier = elevatorStatMultiplier2501;
-        } else if (currentLevel < 4001) {
-            currentCostMultiplier = elevatorCostMultiplier3001;
-            currentStatMultiplier = elevatorStatMultiplier3001;
-        } else if (currentLevel < 5001) {
-            currentCostMultiplier = elevatorCostMultiplier4001;
-            currentStatMultiplier = elevatorStatMultiplier4001;
-        } else {
-            currentCostMultiplier = elevatorCostMultiplier5001;
-            currentStatMultiplier = elevatorStatMultiplier5001;
-        }
+        // Determine the correct multipliers based on the level
+        let currentCostMultiplier = getMultiplier(newLevel["Level"], "cost");
+        let currentStatMultiplier = getMultiplier(newLevel["Level"], "stat");
 
-        // Increment cost, capacity, and loading per second based on the current level
+        // Calculate the new values
         newLevel["Cost"] = lastLevel["Cost"] * currentCostMultiplier;
-
-        // Determine the speed increment logic
-        let incrementFactor = 0.01;  // Base increment for speed
-        if (newLevel["Level"] > 2400) {
-            incrementFactor = 0.002;  // Decrease increment for higher levels
-        }
-        
-        // Calculate the new speed
         newLevel["Speed"] = lastLevel["Speed"] + calculateSpeedIncrement(newLevel["Level"]);
-
         newLevel["Capacity"] = lastLevel["Capacity"] * currentStatMultiplier;
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
 
-        // Apply big update for specific levels if needed
-        if ([10, 40, 80, 150, 300, 500, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500].includes(newLevel["Level"])) {
-            newLevel["BigUpdate"] = 1;
-            newLevel["SuperCashReward"] = 15;
-        } else {
-            newLevel["BigUpdate"] = 0;
-            newLevel["SuperCashReward"] = 0;
+        // Apply special multipliers and rewards if needed
+        if (specialLevels.doubleStat.includes(newLevel["Level"])) {
+            newLevel["Capacity"] *= 2;
+            newLevel["LoadingPerSecond"] *= 2;
+        } else if (specialLevels.specialMultipliers[newLevel["Level"]]) {
+            newLevel["Capacity"] *= specialLevels.specialMultipliers[newLevel["Level"]];
+            newLevel["LoadingPerSecond"] *= specialLevels.specialMultipliers[newLevel["Level"]];
         }
 
-        // Update capacity and loading per second according to big update
-        if ([10, 40, 150, 300, 500, 1000, 1100, 1200, 1300, 1400, 1500, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 2;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 2;
-        } else if (newLevel["Level"] === 80) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 1.25;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.25;
-        } else if (newLevel["Level"] === 800) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 1.5;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.5;
-        } else if (newLevel["Level"] === 900) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 2.25;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 2.25;
-        } else if (newLevel["Level"] === 1600) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 3;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 3;
-        } else if ([2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
-            newLevel["SuperCashReward"] = 400;
-        } else if ([2500, 2600, 2700, 2800, 2900].includes(newLevel["Level"])) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 3;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 3;
-            newLevel["SuperCashReward"] = 500;
-        } else if ([3000, 3500, 4000, 4500, 5000, 5500].includes(newLevel["Level"])) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 5;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 5;
-            newLevel["SuperCashReward"] = 500;
-        } else if ([3200, 3400, 3700, 3900].includes(newLevel["Level"])) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 4;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 4;
-            newLevel["SuperCashReward"] = 300;
-        } else if ([4200, 4400, 4600, 4800, 5200, 5400].includes(newLevel["Level"])) {
-            newLevel["Capacity"] = newLevel["Capacity"] * 6;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 6;
-            newLevel["SuperCashReward"] = 200;
-        }
+        newLevel["BigUpdate"] = specialLevels.bigUpdate.includes(newLevel["Level"]) ? 1 : 0;
+        newLevel["SuperCashReward"] = specialLevels.specialRewards[newLevel["Level"]] || 0;
 
         // Push the new level data
         levelData_elevator.push(newLevel);
