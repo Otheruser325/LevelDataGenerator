@@ -1,23 +1,43 @@
 let levelData_warehouse = [];
 
-let warehouseCostMultiplier = 1.20;
-let warehouseStatMultiplier = 1.30;
-let warehouseCostMultiplier11 = 1.20;
-let warehouseStatMultiplier11 = 1.25;
-let warehouseCostMultiplier21 = 1.17;
-let warehouseStatMultiplier21 = 1.20;
-let warehouseCostMultiplier41 = 1.15;
-let warehouseStatMultiplier41 = 1.15;
-let warehouseCostMultiplier101 = 1.13;
-let warehouseStatMultiplier101 = 1.11;
-let warehouseCostMultiplier2501 = 1.15;
-let warehouseStatMultiplier2501 = 1.13;
-let warehouseCostMultiplier3001 = 1.18;
-let warehouseStatMultiplier3001 = 1.15;
-let warehouseCostMultiplier4001 = 1.20;
-let warehouseStatMultiplier4001 = 1.1667;
-let warehouseCostMultiplier5001 = 1.225;
-let warehouseStatMultiplier5001 = 1.1875;
+let multipliers = {
+    cost: {
+        0: 1.20, 11: 1.20, 21: 1.17, 41: 1.15, 101: 1.13, 
+        2501: 1.15, 3001: 1.18, 4001: 1.20, 5001: 1.225
+    },
+    stat: {
+        0: 1.30, 11: 1.25, 21: 1.20, 41: 1.15, 101: 1.11, 
+        2501: 1.13, 3001: 1.15, 4001: 1.1667, 5001: 1.1875
+    }
+};
+
+let specialLevels = {
+    bigUpdate: [20, 50, 100, 200, 400, 600, 800, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500],
+    doubleStat: [20, 50, 200, 400, 600, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400],
+    specialMultipliers: {
+        100: 1.25, 800: 1.5, 2500: 3, 2600: 3, 
+        2700: 3, 2800: 3, 2900: 3, 3000: 5, 
+        3500: 5, 4000: 5, 4500: 5, 5000: 5, 
+        5500: 5, 3200: 4, 3400: 4, 3700: 4, 3900: 4,
+        4200: 6, 4400: 6, 4600: 6, 4800: 6, 5200: 6, 5400: 6
+    },
+    specialRewards: {
+        2000: 400, 2100: 400, 2200: 400, 2300: 400, 2400: 400,
+        2500: 500, 2600: 500, 2700: 500, 2800: 500, 2900: 500,
+        3000: 500, 3500: 500, 4000: 500, 4500: 500, 5000: 500, 5500: 500,
+        3200: 300, 3400: 300, 3700: 300, 3900: 300
+    }
+};
+
+function getMultiplier(level, type) {
+    let keys = Object.keys(multipliers[type]).map(k => parseInt(k));
+    for (let i = keys.length - 1; i >= 0; i--) {
+        if (level >= keys[i]) {
+            return multipliers[type][keys[i]];
+        }
+    }
+    return 1; // Default multiplier if not found
+}
 
 if (!window.workerSpeedIncrementWarehouseLevel) {
     var workerSpeedIncrementWarehouseLevel = {
@@ -117,42 +137,13 @@ function generateLevels_warehouse() {
 
     for (let i = 0; i < levelsToGenerate; i++) {
         let newLevel = {};
-
         newLevel["Level"] = lastLevel["Level"] + 1;
 
-        // Determine the correct multiplier based on the level
-        let currentCostMultiplier;
-        let currentStatMultiplier;
-        if (currentLevel < 11) {
-            currentCostMultiplier = warehouseCostMultiplier;
-            currentStatMultiplier = warehouseStatMultiplier;
-        } else if (currentLevel < 21) {
-            currentCostMultiplier = warehouseCostMultiplier11;
-            currentStatMultiplier = warehouseStatMultiplier11;
-        } else if (currentLevel < 41) {
-            currentCostMultiplier = warehouseCostMultiplier21;
-            currentStatMultiplier = warehouseStatMultiplier21;
-        } else if (currentLevel < 101) {
-            currentCostMultiplier = warehouseCostMultiplier41;
-            currentStatMultiplier = warehouseStatMultiplier41;
-        } else if (currentLevel < 2501) {
-            currentCostMultiplier = warehouseCostMultiplier101;
-            currentStatMultiplier = warehouseStatMultiplier101;
-        } else if (currentLevel < 3001) {
-            currentCostMultiplier = warehouseCostMultiplier2501;
-            currentStatMultiplier = warehouseStatMultiplier2501;
-        } else if (currentLevel < 4001) {
-            currentCostMultiplier = warehouseCostMultiplier3001;
-            currentStatMultiplier = warehouseStatMultiplier3001;
-        } else if (currentLevel < 5001) {
-            currentCostMultiplier = warehouseCostMultiplier4001;
-            currentStatMultiplier = warehouseStatMultiplier4001;
-        } else {
-            currentCostMultiplier = warehouseCostMultiplier5001;
-            currentStatMultiplier = warehouseStatMultiplier5001;
-        }
+        // Determine the correct multipliers based on the level
+        let currentCostMultiplier = getMultiplier(newLevel["Level"], "cost");
+        let currentStatMultiplier = getMultiplier(newLevel["Level"], "stat");
 
-        // Increment cost, capacity, and loading per second based on the current level
+        // Calculate the new values
         newLevel["Cost"] = lastLevel["Cost"] * currentCostMultiplier;
         if (workerCountIncrementWarehouseLevel[newLevel["Level"]]) {
             newLevel["NumberOfWorkers"] = workerCountIncrementWarehouseLevel[newLevel["Level"]];
@@ -167,44 +158,17 @@ function generateLevels_warehouse() {
         }
         newLevel["LoadingPerSecond"] = lastLevel["LoadingPerSecond"] * currentStatMultiplier;
 
-        // Apply big update for specific levels if needed
-        if ([20, 50, 100, 200, 400, 600, 800, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000, 3200, 3400, 3500, 3700, 3900, 4000, 4200, 4400, 4500, 4600, 4800, 5000, 5200, 5400, 5500].includes(newLevel["Level"])) {
-            newLevel["BigUpdate"] = 1;
-            newLevel["SuperCashReward"] = 15;
-        } else {
-            newLevel["BigUpdate"] = 0;
-            newLevel["SuperCashReward"] = 0;
+        // Apply special multipliers and rewards if needed
+        if (specialLevels.doubleStat.includes(newLevel["Level"])) {
+            newLevel["CapacityPerWorker"] *= 2;
+            newLevel["LoadingPerSecond"] *= 2;
+        } else if (specialLevels.specialMultipliers[newLevel["Level"]]) {
+            newLevel["CapacityPerWorker"] *= specialLevels.specialMultipliers[newLevel["Level"]];
+            newLevel["LoadingPerSecond"] *= specialLevels.specialMultipliers[newLevel["Level"]];
         }
 
-        // Update capacity and loading per second according to big update
-        if ([50, 200, 600, 850, 950, 1050, 1150, 1250, 1350, 1450, 1550, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
-            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 2;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 2;
-        } else if (newLevel["Level"] === 100) {
-            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 1.25;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.25;
-        } else if (newLevel["Level"] === 800) {
-            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 1.5;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 1.5;
-        } else if ([2000, 2100, 2200, 2300, 2400].includes(newLevel["Level"])) {
-            newLevel["SuperCashReward"] = 400;
-        } else if ([2500, 2600, 2700, 2800, 2900].includes(newLevel["Level"])) {
-            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 3;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 3;
-            newLevel["SuperCashReward"] = 500;
-        } else if ([3000, 3500, 4000, 4500, 5000, 5500].includes(newLevel["Level"])) {
-            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 5;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 5;
-            newLevel["SuperCashReward"] = 500;
-        } else if ([3200, 3400, 3700, 3900].includes(newLevel["Level"])) {
-            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 4;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 4;
-            newLevel["SuperCashReward"] = 300;
-        } else if ([4200, 4400, 4600, 4800, 5200, 5400].includes(newLevel["Level"])) {
-            newLevel["CapacityPerWorker"] = newLevel["CapacityPerWorker"] * 6;
-            newLevel["LoadingPerSecond"] = newLevel["LoadingPerSecond"] * 6;
-            newLevel["SuperCashReward"] = 200;
-        }
+        newLevel["BigUpdate"] = specialLevels.bigUpdate.includes(newLevel["Level"]) ? 1 : 0;
+        newLevel["SuperCashReward"] = specialLevels.specialRewards[newLevel["Level"]] || 0;
         
         // Push the new level data
         levelData_warehouse.push(newLevel);
