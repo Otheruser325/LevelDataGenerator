@@ -94,8 +94,8 @@ function generateLevels_elevator() {
             newLevel["Capacity"] *= 2;
             newLevel["LoadingPerSecond"] *= 2;
         } else if (specialLevelsElevator.specialMultipliers[newLevel["Level"]]) {
-            newLevel["Capacity"] *= specialLevels.specialMultipliers[newLevel["Level"]];
-            newLevel["LoadingPerSecond"] *= specialLevels.specialMultipliers[newLevel["Level"]];
+            newLevel["Capacity"] *= specialLevelsElevator.specialMultipliers[newLevel["Level"]];
+            newLevel["LoadingPerSecond"] *= specialLevelsElevator.specialMultipliers[newLevel["Level"]];
         }
 
         newLevel["BigUpdate"] = specialLevelsElevator.bigUpdate.includes(newLevel["Level"]) ? 1 : 0;
